@@ -22,3 +22,9 @@ The signature is 8 bytes long and contains the following values (hex):
 
 In ASCII, bytes 2-3 are "PNG"
 bytes 5-6 are "\r\n" and byte 8 is also "\n"
+
+After the signature, the series of chunks begins.
+Each chunk has the following format:
+| Length | Chunk type | Chunk data | CRC |
+| --- | --- | --- | --- |
+| 4 bytes | 4 bytes | _length_ bytes | 4 bytes |
