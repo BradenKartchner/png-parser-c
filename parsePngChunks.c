@@ -1,13 +1,14 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include "chunk_handlers.h"
+#include "chunk_handlers.c"
 
 // Maximum file size of 16 MB
 # define MAX_SIZE (16 * 1024 * 1024)
 
 void validate(int val, const char *msg, int whichByte);
-void check_header(const char *buf);
-int get_big_endian(const char *buf);
+void check_signature(const char *buf);
 
 int main(int argc, char **argv) {
     // check to make sure file was passed in via command line
@@ -36,7 +37,7 @@ int main(int argc, char **argv) {
     printf("file size: %d\n", size);
 
     // validate file as PNG
-    check_header(buf);
+    check_signature(buf);
 
     /* Parse PNG file */
     // position in buffer (start after signature)
@@ -54,6 +55,13 @@ int main(int argc, char **argv) {
         char chunkbuf[5];
         memcpy(chunkbuf, buf + posInBuff, 4);
         chunkbuf[4] = 0;
+        // handle each chunk parsing separately
+        for (unsigned int i = 0; chunk_handlers[i].type != NULL; i++) {
+            if (!strcmp(chunkbuf, chunk_handlers[i].type)) {
+                chunk_handlers[i].func(buf + posInBuff + 4, len);
+                break;
+            }
+        }
         // advance position in buffer for chunk type (4 bytes), len, and crc (4 bytes)
         posInBuff = posInBuff + 8 + len;
         printf("chunk: %s - len: %d (%d)\n", chunkbuf, len, size - posInBuff);
@@ -75,15 +83,10 @@ void validate(int val, const char *msg, int whichByte) {
 }
 
 // note that signed char has a range of -127 to 127 (1 byte)
-void check_header(const char *buf) {
-    int pngHeaderVals[] = {0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
+void check_signature(const char *buf) {
+    int pngSignatureVals[] = {0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a};
     for (unsigned int i = 0; i < 8; i++) {
-        validate((unsigned char)buf[i] == pngHeaderVals[i], "header byte ", i);
+        validate((unsigned char)buf[i] == pngSignatureVals[i], "signature byte ", i);
     }
-    printf("header valid!\n");
-}
-
-// turn 4-character buffer into an integer
-int get_big_endian(const char *buf) {
-    return ((unsigned char)buf[0] << 24) | ((unsigned char)buf[1] << 16) | ((unsigned char)buf[2] << 8) | (unsigned char)buf[3];
+    printf("signature valid!\n");
 }
