@@ -6,6 +6,7 @@
 // function prototypes
 
 int get_big_endian(const char *buf);
+int get_2_byte_big_endian(const char *buf);
 void validate_length(int actualVal, int expectedVal, const char *msg);
 void header_handler(const char *buf, int len);
 void time_handler(const char *buf, int len);

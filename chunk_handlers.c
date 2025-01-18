@@ -7,6 +7,11 @@ int get_big_endian(const char *buf) {
     return ((unsigned char)buf[0] << 24) | ((unsigned char)buf[1] << 16) | ((unsigned char)buf[2] << 8) | (unsigned char)buf[3];
 }
 
+// turn 2-character buffer into an integer
+int get_2_byte_big_endian(const char *buf) {
+    return ((unsigned char)buf[0] << 8) | ((unsigned char)buf[1]);
+}
+
 void validate_length(int actualVal, int expectedVal, const char *msg) {
     if (!(actualVal == expectedVal)) {
         printf("%s: actual length is %d, expected length is %d\n", msg, actualVal, expectedVal);
@@ -28,5 +33,12 @@ void header_handler(const char *buf, int len) {
 }
 
 void time_handler(const char *buf, int len) {
-    printf("lulz time working\n");
+    printf("Time header info:\n");
+    validate_length(len, 7, "Error in time chunk length");
+    printf("Year: %d\n", get_2_byte_big_endian(buf));
+    printf("Month: %d\n", (unsigned char)buf[2]);
+    printf("Day: %d\n", (unsigned char)buf[3]);
+    printf("Hour: %d\n", (unsigned char)buf[4]);
+    printf("Minute: %d\n", (unsigned char)buf[5]);
+    printf("Second: %d\n", (unsigned char)buf[6]);
 }
