@@ -42,3 +42,11 @@ void time_handler(const char *buf, int len) {
     printf("Minute: %d\n", (unsigned char)buf[5]);
     printf("Second: %d\n", (unsigned char)buf[6]);
 }
+
+void phys_pixel_dims_handler(const char *buf, int len) {
+    printf("Physical pixel dimensions:\n");
+    validate_length(len, 9, "Error in pHYs chunk length");
+    printf("X axis pixels per unit: %d\n", get_big_endian(buf));
+    printf("Y axis pixels per unit: %d\n", get_big_endian(buf + 4));
+    printf("Unit specifier: %d\n", (unsigned char)buf[8]);
+}
