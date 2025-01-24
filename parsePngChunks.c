@@ -42,6 +42,10 @@ int main(int argc, char **argv) {
     // validate file as PNG
     check_signature(buf);
 
+    // Initialize struct for containing png data
+    struct png_data myPngStruct;
+    memset(&myPngStruct, 0x00, sizeof(myPngStruct));
+
     /* Parse PNG file */
     // position in buffer (start after signature)
     int posInBuff = 8;
@@ -61,7 +65,7 @@ int main(int argc, char **argv) {
         // handle each chunk parsing separately
         for (unsigned int i = 0; chunk_handlers[i].type != NULL; i++) {
             if (!strcmp(chunkbuf, chunk_handlers[i].type)) {
-                chunk_handlers[i].func(buf + posInBuff + 4, len);
+                chunk_handlers[i].func(buf + posInBuff + 4, len, &myPngStruct);
                 break;
             }
         }
