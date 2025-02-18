@@ -6,6 +6,8 @@
 // struct definition
 struct png_data {
     int color_type;
+    int header_data_size;
+    int header_data[7];
 };
 
 // function prototypes

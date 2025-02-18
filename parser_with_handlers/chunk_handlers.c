@@ -20,6 +20,8 @@ void validate_length(int actualVal, int expectedVal, const char *msg) {
 }
 
 // https://datatracker.ietf.org/doc/html/rfc2083#page-15
+// store in struct array:
+// [width, height, bit_depth, color_type, compression_method, filter_method, interlace_method]
 void header_handler(const char *buf, int len, struct png_data *currPng) {
     printf("Header info:\n");
     validate_length(len, 13, "Error in header length");

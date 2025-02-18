@@ -45,6 +45,16 @@ int main(int argc, char **argv) {
     // Initialize struct for containing png data
     struct png_data myPngStruct;
     memset(&myPngStruct, 0x00, sizeof(myPngStruct));
+    // initialize values for struct arrays
+    myPngStruct.header_data_size = 7;
+    for (int i = 0; i < myPngStruct.header_data_size; i++) {
+        myPngStruct.header_data[i] = 0;
+    }
+    printf("[");
+    for (int i = 0; i < myPngStruct.header_data_size; i++) {
+        printf("%d ", myPngStruct.header_data[i]);
+    }
+    printf("]\n");
 
     /* Parse PNG file */
     // position in buffer (start after signature)
