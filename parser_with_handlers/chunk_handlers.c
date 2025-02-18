@@ -26,7 +26,9 @@ void header_handler(const char *buf, int len, struct png_data *currPng) {
     printf("width: %d pixels\n", get_big_endian(buf));
     printf("height: %d pixels\n", get_big_endian(buf + 4));
     printf("bit depth: %d\n", (unsigned char)buf[8]);
-    printf("color type: %d\n", (unsigned char)buf[9]);
+    int color_type = (unsigned char)buf[9];
+    currPng->color_type = color_type;
+    printf("color type: %d\n", color_type);
     printf("compression method: %d\n", (unsigned char)buf[10]);
     printf("filter method: %d\n", (unsigned char)buf[11]);
     printf("interlace method %d\n", (unsigned char)buf[12]);
@@ -53,4 +55,5 @@ void phys_pixel_dims_handler(const char *buf, int len, struct png_data *currPng)
 
 void background_color_handler(const char *buf, int len, struct png_data *currPng) {
     printf("Background color chunk\n");
+    printf("Color type still accessible: %d\n", currPng->color_type);
 }
