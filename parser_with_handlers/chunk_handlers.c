@@ -25,15 +25,27 @@ void validate_length(int actualVal, int expectedVal, const char *msg) {
 void header_handler(const char *buf, int len, struct png_data *currPng) {
     printf("Header info:\n");
     validate_length(len, 13, "Error in header length");
-    printf("width: %d pixels\n", get_big_endian(buf));
-    printf("height: %d pixels\n", get_big_endian(buf + 4));
-    printf("bit depth: %d\n", (unsigned char)buf[8]);
+    int width = get_big_endian(buf);
+    currPng->header_data[0] = width;
+    printf("width: %d pixels\n", width);
+    int height = get_big_endian(buf + 4);
+    currPng->header_data[1] = height;
+    printf("height: %d pixels\n", height);
+    int bit_depth = (unsigned char)buf[8];
+    currPng->header_data[2] = bit_depth;
+    printf("bit depth: %d\n", bit_depth);
     int color_type = (unsigned char)buf[9];
     currPng->color_type = color_type;
+    currPng->header_data[3] = color_type;
     printf("color type: %d\n", color_type);
     printf("compression method: %d\n", (unsigned char)buf[10]);
     printf("filter method: %d\n", (unsigned char)buf[11]);
     printf("interlace method %d\n", (unsigned char)buf[12]);
+    printf("[");
+    for (int i = 0; i < currPng->header_data_size; i++) {
+        printf("%d, ", currPng->header_data[i]);
+    }
+    printf("]\n");
 }
 
 void time_handler(const char *buf, int len, struct png_data *currPng) {
