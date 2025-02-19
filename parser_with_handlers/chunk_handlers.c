@@ -38,9 +38,12 @@ void header_handler(const char *buf, int len, struct png_data *currPng) {
     currPng->color_type = color_type;
     currPng->header_data[3] = color_type;
     printf("color type: %d\n", color_type);
-    printf("compression method: %d\n", (unsigned char)buf[10]);
-    printf("filter method: %d\n", (unsigned char)buf[11]);
-    printf("interlace method %d\n", (unsigned char)buf[12]);
+    currPng->header_data[4] = (unsigned char)buf[10];
+    printf("compression method: %d\n", currPng->header_data[4]);
+    currPng->header_data[5] = (unsigned char)buf[11];
+    printf("filter method: %d\n", currPng->header_data[5]);
+    currPng->header_data[6] = (unsigned char)buf[12];
+    printf("interlace method %d\n", currPng->header_data[6]);
     printf("[");
     for (int i = 0; i < currPng->header_data_size; i++) {
         printf("%d, ", currPng->header_data[i]);
