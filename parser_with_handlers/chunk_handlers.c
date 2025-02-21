@@ -25,19 +25,15 @@ void validate_length(int actualVal, int expectedVal, const char *msg) {
 void header_handler(const char *buf, int len, struct png_data *currPng) {
     printf("Header info:\n");
     validate_length(len, 13, "Error in header length");
-    int width = get_big_endian(buf);
-    currPng->header_data[0] = width;
-    printf("width: %d pixels\n", width);
-    int height = get_big_endian(buf + 4);
-    currPng->header_data[1] = height;
-    printf("height: %d pixels\n", height);
-    int bit_depth = (unsigned char)buf[8];
-    currPng->header_data[2] = bit_depth;
-    printf("bit depth: %d\n", bit_depth);
-    int color_type = (unsigned char)buf[9];
-    currPng->color_type = color_type;
-    currPng->header_data[3] = color_type;
-    printf("color type: %d\n", color_type);
+    currPng->header_data[0] = get_big_endian(buf);
+    printf("width: %d pixels\n", currPng->header_data[0]);
+    currPng->header_data[1] = get_big_endian(buf + 4);
+    printf("height: %d pixels\n", currPng->header_data[1]);
+    currPng->header_data[2] = (unsigned char)buf[8];
+    printf("bit depth: %d\n", currPng->header_data[2]);
+    currPng->color_type = (unsigned char)buf[9];
+    currPng->header_data[3] = (unsigned char)buf[9];
+    printf("color type: %d\n", currPng->header_data[3]);
     currPng->header_data[4] = (unsigned char)buf[10];
     printf("compression method: %d\n", currPng->header_data[4]);
     currPng->header_data[5] = (unsigned char)buf[11];
