@@ -4,8 +4,8 @@ PNG Parser in C
 
 # for reference
 
-https://datatracker.ietf.org/doc/html/rfc2083
-https://progbook.org/png.html
+https://datatracker.ietf.org/doc/html/rfc2083  
+https://progbook.org/png.html  
 https://www.w3.org/TR/png-3/#abstract
 
 # PNG file format basics
